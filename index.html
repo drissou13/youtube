@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>youtube</title>
+  
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compteur en Temps Réel - YouTube.fr</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        #count {
+            font-size: 2em;
+            font-weight: bold;
+            color: #ff0000;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Nombre de vidéos en ligne sur YouTube.fr</h1>
+    <p>Estimé via l'API YouTube</p>
+    <p id="count">Chargement...</p>
+    <p id="update-time"></p>
+
+    <script>
+        const apiKey = "AIzaSyB5bWj0Mgpo2pZVo_TrPE510jfQFr5tDIU"; // 🔴 Remplace avec ta clé API YouTube
+        const url = `https://www.googleapis.com/youtube/v3/search?part=id&type=video&regionCode=FR&maxResults=50&relevanceLanguage=fr&key=${apiKey}`;
+
+        async function getVideoCount() {
+            try {
+                let response = await fetch(url);
+                let data = await response.json();
+                
+                if (data.pageInfo) {
+                    document.getElementById("count").innerText = `Environ ${data.pageInfo.totalResults.toLocaleString()} vidéos`;
+                    
+                    // Afficher l'heure de mise à jour
+                    let now = new Date().toLocaleTimeString();
+                    document.getElementById("update-time").innerText = `Dernière mise à jour : ${now}`;
+                } else {
+                    document.getElementById("count").innerText = "Impossible d'obtenir les données.";
+                }
+            } catch (error) {
+                document.getElementById("count").innerText = "Erreur de chargement.";
+                console.error("Erreur API YouTube:", error);
+            }
+        }
+
+        // 🔄 Mise à jour automatique toutes les 30 secondes
+        getVideoCount();
+        setInterval(getVideoCount, 30000); // 30 000 ms = 30s
+
+    </script>
+
+</body>
+</html>
+<!-- partial -->
+  
+</body>
+</html>
